@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post, Req, UseGuards, UsePipes } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch, Post, Req, UseGuards } from '@nestjs/common';
 import { PokemonsService } from './pokemons.service';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { ZodValidationPipe } from '../common/pipes/zod-validation.pipe';
@@ -11,8 +11,7 @@ export class PokemonsController {
   constructor(private service: PokemonsService) {}
 
   @Post()
-  @UsePipes(new ZodValidationPipe(CreatePokemonSchema))
-  create(@Req() req: any, @Body() dto: CreatePokemonDto) {
+  create(@Req() req: any, @Body(new ZodValidationPipe(CreatePokemonSchema)) dto: CreatePokemonDto) {
     return this.service.create(req.user.sub, dto);
   }
 
@@ -27,8 +26,7 @@ export class PokemonsController {
   }
 
   @Patch(':id')
-  @UsePipes(new ZodValidationPipe(CreatePokemonSchema.partial()))
-  update(@Req() req: any, @Param('id') id: string, @Body() dto: any) {
+  update(@Req() req: any, @Param('id') id: string, @Body(new ZodValidationPipe(CreatePokemonSchema.partial())) dto: any) {
     return this.service.update(req.user.sub, id, dto);
   }
 
