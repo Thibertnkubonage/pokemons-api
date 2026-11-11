@@ -9,18 +9,22 @@ export class PokemonsService {
     return this.prisma.pokemon.create({ data: { ...data, userId } });
   }
 
-  findAll(userId: string) {
-    return this.prisma.pokemon.findMany({ where: { userId } });
+  // PUBLIC : tout le monde peut voir tous les Pokémons
+  findAll() {
+    return this.prisma.pokemon.findMany();
   }
 
-  findOne(userId: string, id: string) {
-    return this.prisma.pokemon.findFirst({ where: { id, userId } });
+  // PUBLIC : tout le monde peut voir un Pokémon
+  findOne(id: string) {
+    return this.prisma.pokemon.findFirst({ where: { id } });
   }
 
+  // PROTÉGÉ : seulement le propriétaire peut modifier
   update(userId: string, id: string, data: any) {
     return this.prisma.pokemon.updateMany({ where: { id, userId }, data });
   }
 
+  // PROTÉGÉ : seulement le propriétaire peut supprimer
   remove(userId: string, id: string) {
     return this.prisma.pokemon.deleteMany({ where: { id, userId } });
   }
